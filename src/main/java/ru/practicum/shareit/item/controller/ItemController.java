@@ -20,7 +20,6 @@ public class ItemController {
     @PostMapping
     public ItemDto create(@RequestHeader("X-Sharer-User-Id") Long userId,
                           @RequestBody ItemDto itemDto) {
-        validate(itemDto);
         ItemDto createdItem = itemService.create(userId, itemDto);
         log.debug("Добавлен item с идентификатором : {}", createdItem.getId());
         return createdItem;
@@ -52,20 +51,12 @@ public class ItemController {
 
     @GetMapping("/search")
     public List<ItemDto> searchItems(@RequestParam(value = "text") String text) {
-        if (text.isBlank())
+        if (text.isBlank()) {
             return new ArrayList<>();
+        }
         List<ItemDto> items = itemService.searchItems(text);
         log.debug("Получен список вещей по ключевому слову : {}", text);
         return items;
     }
 
-    private void validate(ItemDto itemDto) {
-        if (itemDto.getName() == null ||
-                itemDto.getName().isBlank() ||
-                itemDto.getDescription() == null ||
-                itemDto.getDescription().isBlank() ||
-                itemDto.getAvailable() == null) {
-            throw new NotFoundException("Имя или описание не указаны.");
-        }
-    }
 }

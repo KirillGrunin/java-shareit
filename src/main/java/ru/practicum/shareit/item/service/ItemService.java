@@ -14,4 +14,6 @@ public interface ItemService {
     List<ItemDto> findAll(Long userId);
 
     List<ItemDto> searchItems(String text);
+
+    void validate(ItemDto itemDto);
 }

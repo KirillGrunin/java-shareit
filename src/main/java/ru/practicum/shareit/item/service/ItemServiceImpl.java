@@ -11,6 +11,7 @@ import ru.practicum.shareit.util.exeption.NotFoundExceptionEntity;
 import ru.practicum.shareit.util.mapper.ItemMapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ru.practicum.shareit.util.mapper.ItemMapper.toItem;
@@ -25,6 +26,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto create(Long userId, ItemDto itemDto) {
+        validate(itemDto);
         userService.findById(userId);
         itemDto.setId(id);
         Item createItem = itemRepository.create(userId, toItem(itemDto));
@@ -39,21 +41,23 @@ public class ItemServiceImpl implements ItemService {
                 .filter(item -> item.getOwner().equals(userId))
                 .findAny()
                 .orElseThrow(() -> new NotFoundExceptionEntity("Владелец item с идентификатором : " + userId + " указан не верно."));
-        if (itemDto.getName() != null)
+        if (itemDto.getName() != null) {
             itemUpdate.setName(itemDto.getName());
-        if (itemDto.getDescription() != null)
+        }
+        if (itemDto.getDescription() != null) {
             itemUpdate.setDescription(itemDto.getDescription());
-        if (itemDto.getAvailable() != null)
+        }
+        if (itemDto.getAvailable() != null) {
             itemUpdate.setIsAvailable(itemDto.getAvailable());
+        }
         Item returnsItem = itemRepository.update(itemUpdate);
         return toItemDto(returnsItem);
     }
 
     @Override
     public ItemDto findById(Long itemId) {
-        Item item = itemRepository.findById(itemId);
-        if (item == null)
-            throw new NotFoundException("Item с идентификатором : " + itemId + " не найден.");
+        Item item = Optional.ofNullable(itemRepository.findById(itemId))
+                .orElseThrow(() -> new NotFoundException("Item с идентификатором : " + itemId + " не найден."));
         return toItemDto(item);
     }
 
@@ -71,5 +75,16 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void validate(ItemDto itemDto) {
+        if (itemDto.getName() == null ||
+                itemDto.getName().isBlank() ||
+                itemDto.getDescription() == null ||
+                itemDto.getDescription().isBlank() ||
+                itemDto.getAvailable() == null) {
+            throw new NotFoundException("Имя или описание не указаны.");
+        }
     }
 }

@@ -5,17 +5,12 @@ import ru.practicum.shareit.util.enums.BookingStatus;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode
-@ToString
+@Value
 public class BookingDto {
-    private Long id;
-    private LocalDateTime start;
-    private LocalDateTime end;
-    private Long item;
-    private Long booker;
-    private BookingStatus status;
+    Long id;
+    LocalDateTime start;
+    LocalDateTime end;
+    Long item;
+    Long booker;
+    BookingStatus status;
 }
