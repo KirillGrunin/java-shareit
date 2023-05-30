@@ -8,8 +8,6 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
-@ToString
 public class CommentDto {
     @NotBlank
     private String text;

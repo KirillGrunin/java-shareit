@@ -25,8 +25,8 @@ public class Item {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "isAvailable")
-    private Boolean isAvailable;
+    @Column(name = "availability")
+    private Boolean availability;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id")

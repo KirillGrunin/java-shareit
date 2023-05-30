@@ -66,7 +66,7 @@ public class ItemServiceImpl implements ItemService {
         if (itemDto.getDescription() != null)
             itemUpdate.setDescription(itemDto.getDescription());
         if (itemDto.getAvailable() != null)
-            itemUpdate.setIsAvailable(itemDto.getAvailable());
+            itemUpdate.setAvailability(itemDto.getAvailable());
         final Item item = itemRepository.save(itemUpdate);
         return toItemDto(item);
     }
@@ -132,7 +132,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> searchItems(String text) {
-        return itemRepository.findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndIsAvailableIsTrue(text, text)
+        return itemRepository.findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndAvailabilityIsTrue(text, text)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());

@@ -36,18 +36,21 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDto create(BookingJsonDto bookingJsonDto, Long userId) {
         if (bookingJsonDto.getEnd().isBefore(bookingJsonDto.getStart()) ||
-                bookingJsonDto.getEnd().equals(bookingJsonDto.getStart()))
+                bookingJsonDto.getEnd().equals(bookingJsonDto.getStart())) {
             throw new NotFoundException("Дата окончания бронирования не может быть позже даты старта или равна ей.");
+        }
         final Long itemId = bookingJsonDto.getItemId();
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundExceptionEntity("Пользователь с идентификатором : " + userId + " не найден."));
         final Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundExceptionEntity("Item с идентификатором : " + itemId + " не найден."));
-        if (!item.getIsAvailable())
+        if (!item.getAvailability()) {
             throw new NotFoundException("Item не доступен для бронирования.");
+        }
         final Long id = item.getOwner().getId();
-        if (Objects.equals(id, userId))
+        if (Objects.equals(id, userId)) {
             throw new NotFoundExceptionEntity("Бронирование своего item запрещено.");
+        }
         final Booking booking = toBooking(bookingJsonDto, item, user);
         return toBookingDto(bookingRepository.save(booking));
     }
@@ -57,14 +60,17 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundExceptionEntity("Booking с идентификатором : " + bookingId + " не найден."));
         final Long id = booking.getItem().getOwner().getId();
-        if (!Objects.equals(id, userId))
+        if (!Objects.equals(id, userId)) {
             throw new NotFoundExceptionEntity("Пользователь с идентификатором : " + userId + " не может обновить статус item.");
-        if (!booking.getStatus().equals(BookingStatus.WAITING))
+        }
+        if (!booking.getStatus().equals(BookingStatus.WAITING)) {
             throw new NotFoundException("Статус booker должен быть WAITING.");
-        if (isApproved)
+        }
+        if (isApproved) {
             booking.setStatus(BookingStatus.APPROVED);
-        else
+        } else {
             booking.setStatus(BookingStatus.REJECTED);
+        }
         return toBookingDto(bookingRepository.save(booking));
     }
 

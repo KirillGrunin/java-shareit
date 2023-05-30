@@ -10,7 +10,7 @@ public class ItemMapper {
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
-                item.getIsAvailable(),
+                item.getAvailability(),
                 item.getOwner(),
                 item.getRequest() != null ? item.getRequest().getId() : null
         );
@@ -20,7 +20,7 @@ public class ItemMapper {
         Item item = new Item();
         item.setName(itemDto.getName());
         item.setDescription(itemDto.getDescription());
-        item.setIsAvailable(itemDto.getAvailable());
+        item.setAvailability(itemDto.getAvailable());
         item.setOwner(itemDto.getOwner());
         return item;
     }
@@ -30,7 +30,7 @@ public class ItemMapper {
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
-                item.getIsAvailable(),
+                item.getAvailability(),
                 item.getOwner(),
                 item.getRequest() != null ? item.getRequest().getId() : null);
     }
