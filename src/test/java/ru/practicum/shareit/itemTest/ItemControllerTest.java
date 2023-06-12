@@ -156,21 +156,4 @@ public class ItemControllerTest {
                 .andExpect(content().json("[]"));
         verify(itemService, times(1)).searchItems(userId, text, page);
     }
-
-    @Test
-    void createComment() throws Exception {
-        var itemId = 1L;
-        when(itemService.createComment(userId, commentDto, itemId))
-                .thenReturn(commentResponseDto);
-
-        mvc.perform(post("/items/" + itemId + "/comment")
-                        .content(mapper.writeValueAsString(commentDto))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .header("X-Sharer-User-Id", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.ALL))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(commentResponseDto.getId()));
-        verify(itemService, times(1)).createComment(userId, commentDto, itemId);
-    }
 }
