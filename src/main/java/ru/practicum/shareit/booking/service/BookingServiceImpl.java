@@ -37,7 +37,6 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
 
     @Override
-    @Transactional
     public BookingDto create(BookingRequestDto bookingRequestDto, Long userId) {
         if (bookingRequestDto.getEnd().isBefore(bookingRequestDto.getStart()) ||
                 bookingRequestDto.getEnd().equals(bookingRequestDto.getStart())) {
