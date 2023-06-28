@@ -49,8 +49,8 @@ public class ItemController {
 
     @GetMapping
     public List<ItemResponseDto> findAll(@RequestHeader(USER_ID) Long userId,
-                                         @RequestParam(value = FROM, defaultValue = "0") Integer from,
-                                         @RequestParam(value = SIZE, defaultValue = "10") Integer size) {
+                                         @RequestParam(value = FROM, defaultValue = DEFAULTVALUEMIN) Integer from,
+                                         @RequestParam(value = SIZE, defaultValue = DEFAULTVALUESIZE) Integer size) {
         Sort sort = Sort.by(Sort.Direction.ASC, "id");
         final PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size, sort);
         final List<ItemResponseDto> findAllItem = itemService.findAll(userId, page);
@@ -61,8 +61,8 @@ public class ItemController {
     @GetMapping("/search")
     public List<ItemDto> searchItems(@RequestHeader(USER_ID) Long userId,
                                      @RequestParam(value = "text") String text,
-                                     @RequestParam(value = FROM, defaultValue = "0") Integer from,
-                                     @RequestParam(value = SIZE, defaultValue = "10") Integer size) {
+                                     @RequestParam(value = FROM, defaultValue = DEFAULTVALUEMIN) Integer from,
+                                     @RequestParam(value = SIZE, defaultValue = DEFAULTVALUESIZE) Integer size) {
         final PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);
         final List<ItemDto> items = itemService.searchItems(userId, text, page);
         log.debug("Получен список вещей по ключевому слову : {}", text);

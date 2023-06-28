@@ -15,7 +15,7 @@ public interface ItemService {
 
     ItemResponseDto findById(Long itemId, Long userId);
 
-    List<ItemResponseDto> findAll(Long userId,PageRequest page);
+    List<ItemResponseDto> findAll(Long userId, PageRequest page);
 
     List<ItemDto> searchItems(Long userId, String text, PageRequest page);
 
